@@ -1,0 +1,5 @@
+{
+  "name": "Robot Reservation App",
+  "description": "A mobile-first prototype for reserving and placing robots in various locations, featuring step-by-step registration and automated location selection.",
+  "requestFramePermissions": []
+}
