@@ -55,6 +55,7 @@ const SignupView: React.FC = () => {
         <div className="mt-8 text-center">
           <p className="text-sm text-gray-500">
             すでにアカウントを持っていますか？{' '}
+            <br />
             <Link to="/auth/login" className="text-indigo-600 font-bold hover:underline">
               ログイン
             </Link>

@@ -55,6 +55,7 @@ const LoginView: React.FC = () => {
         <div className="mt-8 text-center">
           <p className="text-sm text-gray-500">
             アカウントをお持ちでないですか？{' '}
+            <br />
             <Link to="/auth/signup" className="text-indigo-600 font-bold hover:underline">
               新規登録
             </Link>
