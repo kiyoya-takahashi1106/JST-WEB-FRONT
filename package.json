@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "curl -X POST \"https://api.render.com/deploy/srv-d55s0h1r0fns73d345a0?key=DXhq9hyQ1nU\""
   },
   "dependencies": {
     "react": "^19.2.3",
