@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { MemoryRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AppProvider, useApp } from './context/AppContext';
 import HomeView from './views/HomeView';
 import PostDetailView from './views/PostDetailView';
@@ -78,13 +78,9 @@ const AppContent: React.FC = () => {
 const App: React.FC = () => {
   return (
     <AppProvider>
-      {/* 
-        ブラウザの location オブジェクトへのアクセスが拒否される環境（blob URL等）では、
-        ブラウザのURLを触らない MemoryRouter を使用するのが最も確実です。
-      */}
-      <MemoryRouter initialEntries={['/']}>
+      <BrowserRouter>
         <AppContent />
-      </MemoryRouter>
+      </BrowserRouter>
     </AppProvider>
   );
 };
