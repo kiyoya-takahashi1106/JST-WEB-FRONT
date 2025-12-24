@@ -1,7 +1,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { User, Post, ReserveFormState } from '../types';
-import { INITIAL_POSTS } from '../constants';
+import { fetchPosts, createReservation } from '../api';
 
 interface AppContextType {
   user: User | null;
@@ -12,7 +12,7 @@ interface AppContextType {
   signup: (name: string) => void;
   logout: () => void;
   setReserveStep1: (form: ReserveFormState) => void;
-  addPost: (post: Post) => void;
+  addPost: (post: Post) => Promise<void>;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -23,18 +23,23 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const [reserveForm, setReserveForm] = useState<ReserveFormState | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  const loadPosts = async () => {
+    try {
+      const fetchedPosts = await fetchPosts();
+      setPosts(fetchedPosts);
+    } catch (e) {
+      console.error("Failed to fetch posts", e);
+    }
+  };
+
   useEffect(() => {
-    const initApp = () => {
+    const initApp = async () => {
       try {
         const storedUser = localStorage.getItem('robot_user');
-        const storedPosts = localStorage.getItem('robot_posts');
         
         if (storedUser) setUser(JSON.parse(storedUser));
-        if (storedPosts) {
-          setPosts(JSON.parse(storedPosts));
-        } else {
-          setPosts(INITIAL_POSTS);
-        }
+        
+        await loadPosts();
       } catch (e) {
         console.error("Initialization failed", e);
       } finally {
@@ -65,11 +70,15 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     setReserveForm(form);
   };
 
-  const addPost = (post: Post) => {
-    const updatedPosts = [post, ...posts];
-    setPosts(updatedPosts);
-    localStorage.setItem('robot_posts', JSON.stringify(updatedPosts));
-    setReserveForm(null);
+  const addPost = async (post: Post) => {
+    try {
+      await createReservation(post);
+      await loadPosts(); // Refresh posts after creation
+      setReserveForm(null);
+    } catch (e) {
+      console.error("Failed to add post", e);
+      throw e;
+    }
   };
 
   return (

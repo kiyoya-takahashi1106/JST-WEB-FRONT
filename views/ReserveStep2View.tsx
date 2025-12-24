@@ -32,9 +32,6 @@ const ReserveStep2View: React.FC = () => {
     // 実際の配置場所を決定（おまかせの場合は crowdedPlace を使用）
     const finalPlace = selectedValue === 'AUTO' ? selectedSlot.crowdedPlace : selectedValue;
 
-    // 擬似的なネットワーク遅延
-    await new Promise(resolve => setTimeout(resolve, 1200));
-
     const newPost: Post = {
       ...reserveForm,
       id: 'p' + Date.now(),
@@ -45,9 +42,15 @@ const ReserveStep2View: React.FC = () => {
       created_at: new Date().toISOString(),
     };
 
-    addPost(newPost);
-    setIsSubmitting(false);
-    navigate('/');
+    try {
+      await addPost(newPost);
+      navigate('/');
+    } catch (e) {
+      console.error(e);
+      // alert("予約に失敗しました");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
