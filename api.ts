@@ -1,8 +1,20 @@
-import { API_BASE_URL } from './constants';
+import { API_BASE_URL, API_KEY } from './constants';
 import { Post, ReserveFormState } from './types';
 
+const getHeaders = () => {
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+  };
+  if (API_KEY) {
+    headers['X-Render-API-Key'] = API_KEY;
+  }
+  return headers;
+};
+
 export const fetchPosts = async (): Promise<Post[]> => {
-  const response = await fetch(`${API_BASE_URL}/posts`);
+  const response = await fetch(`${API_BASE_URL}/posts`, {
+    headers: getHeaders(),
+  });
   if (!response.ok) {
     throw new Error('Failed to fetch posts');
   }
@@ -31,9 +43,7 @@ export const createReservation = async (postData: Post): Promise<void> => {
 
   const response = await fetch(`${API_BASE_URL}/reservation`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: getHeaders(),
     body: JSON.stringify(payload),
   });
 

@@ -18,6 +18,7 @@ const SignupView: React.FC = () => {
     signup(name);
     navigate('/');
   };
+  
 
   return (
     <div className="min-h-screen max-w-md mx-auto bg-white flex flex-col items-center justify-center p-8">
